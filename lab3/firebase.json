@@ -1,0 +1,36 @@
+{
+  "emulators": {
+    "singleProjectMode": true
+  },
+  "flutter": {
+    "platforms": {
+      "ios": {
+        "default": {
+          "projectId": "mis-labs-f2f4d",
+          "appId": "1:990201936336:android:32fe5d2519385aef7ce1d5",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "mis-labs-f2f4d",
+          "configurations": {
+            "android": "1:990201936336:android:32fe5d2519385aef7ce1d5",
+            "ios": "1:990201936336:ios:e21cf604467203f07ce1d5",
+            "macos": "1:990201936336:ios:e21cf604467203f07ce1d5",
+            "web": "1:990201936336:web:3709cde61abf1a047ce1d5",
+            "windows": "1:990201936336:web:a0a9c8a96dd1bbbc7ce1d5"
+          }
+        }
+      },
+      "android": {
+        "default": {
+          "projectId": "mis-labs-f2f4d",
+          "appId": "1:990201936336:android:32fe5d2519385aef7ce1d5",
+          "fileOutput": "android/app/google-services.json"
+        }
+      }
+    }
+  }
+}
