@@ -3,7 +3,10 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
 import '../models/event_model.dart';
 import '../service/event_service.dart';
-import 'package:intl/intl.dart'; // For formatting the date/time
+import 'package:intl/intl.dart';
+import 'package:latlong2/latlong.dart';
+import '../service/location_service.dart';
+import 'map_screen.dart';
 
 class CalendarScreen extends StatefulWidget {
   @override
@@ -14,6 +17,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   late final ValueNotifier<List<Event>> _selectedEvents;
   late DateTime _selectedDay;
   late DateTime _focusedDay;
+  LatLng? _userLocation;
+  late LocationService _locationService;
 
   @override
   void initState() {
@@ -21,12 +26,27 @@ class _CalendarScreenState extends State<CalendarScreen> {
     _selectedDay = DateTime.now();
     _focusedDay = DateTime.now();
     _selectedEvents = ValueNotifier([]);
+    _locationService = LocationService();
+    _getUserLocation();
   }
 
   @override
   void dispose() {
     _selectedEvents.dispose();
     super.dispose();
+  }
+
+  Future<void> _getUserLocation() async {
+    try {
+      LatLng? location = await _locationService.getCurrentLocation();
+      if (location != null) {
+        setState(() {
+          _userLocation = location;
+        });
+      }
+    } catch (e) {
+      print('Error fetching location: $e');
+    }
   }
 
   @override
@@ -70,7 +90,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         '${event.location.address}\n${DateFormat('dd/MM/yyyy hh:mm a').format(event.dateTime.toLocal())}',
                       ),
                       onTap: () {
-                        _showEventDetails(event);
+                        _showEventDetails(context, event);
                       },
                     );
                   },
@@ -89,7 +109,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
     _selectedEvents.value = events;
   }
 
-  void _showEventDetails(Event event) {
+  void _showEventDetails(BuildContext context, Event event) {
+    // Use dynamic user location, if available
+    final userLocation = _userLocation ?? LatLng(41.9981, 21.4254);  // Fallback to default if not yet fetched
+
     showDialog(
       context: context,
       builder: (context) {
@@ -103,7 +126,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
               SizedBox(height: 8.0),
               Text('Date & Time: ${DateFormat('dd/MM/yyyy hh:mm a').format(event.dateTime.toLocal())}'),
               SizedBox(height: 8.0),
-              // You can add more details about the event here if needed
             ],
           ),
           actions: [
@@ -112,6 +134,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 Navigator.of(context).pop();
               },
               child: Text('Close'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => MapScreen(
+                      startLocation: userLocation,
+                      eventLocation: LatLng(event.location.latitude, event.location.longitude),
+                      eventName: event.location.address,
+                    ),
+                  ),
+                );
+              },
+              child: Text('Show on Map'),
             ),
           ],
         );

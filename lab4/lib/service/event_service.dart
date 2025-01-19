@@ -8,16 +8,22 @@ class EventService with ChangeNotifier {
   List<Event> _events = [
     Event(
       id: '1',
-      name: 'Math Exam',
+      name: 'Web Based Systems',
       dateTime: DateTime(2025, 5, 18, 9, 0),
-      location: Location(latitude: 40.748817, longitude: -73.985428, address: 'Room 101, Building A'),
+      location: Location(latitude: 42.00431461188742 , longitude: 21.409589870080953, address: 'Lab 117'),
     ),
     Event(
       id: '2',
-      name: 'History Exam',
+      name: 'Probability and Statistics',
       dateTime: DateTime(2025, 5, 19, 14, 0),
-      location: Location(latitude: 34.052235, longitude: -118.243683, address: 'Room 202, Building B'),
+      location: Location(latitude: 42.00431461188742 , longitude: 21.409589870080953, address: 'Lab 200AB'),
     ),
+    Event(
+      id: '3',
+      name: 'Data Science',
+      dateTime: DateTime(2025, 5, 20, 13, 0),
+      location: Location(latitude: 42.00431461188742 , longitude: 21.409589870080953, address: 'Lab 215'),
+    )
   ];
 
   List<Event> get events => _events;
